@@ -1,0 +1,34 @@
+# Add a column with sum of pixels above threshold
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+
+with open('/Users/sabrel/Documents/DataScienceDojo/Digit_Recognizer/train.csv','rU') as csvf:
+    file=csv.reader(csvf)
+    Data=list(file)
+    headers=Data.pop(0)
+
+# Rebuild list out of integers
+rowi,rows=[],[]
+for rownum in Data:
+    rowi=[int(i) for i in rownum]
+    rows+=[rowi]
+
+# In numpy, sum over rows for pixels above threshold
+rowsnp=np.array(rows)
+sums=np.sum(rowsnp>180,axis=1)
+sums.resize(42000,1) #needed otherwise sums is of dim (42000,)
+
+new=np.concatenate((rowsnp,sums),axis=1) #add new column made out of sum of pixels over threshold
+
+# Add back the header, adding a column title for the new column
+headers.append('sum')
+new_header=np.array(headers)
+new_header.resize(786,1)
+new_header.shape
+
+# Add header to new data set
+final=np.concatenate((new_header.T,new),axis=0)
+
+# Expert to csv
+np.savetxt('mydata.csv',final,delimiter=',',fmt='%s',newline='\n')

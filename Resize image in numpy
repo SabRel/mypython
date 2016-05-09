@@ -1,0 +1,27 @@
+#Resize image
+import csv
+import numpy as np
+import matplotlib.pylab as plt
+
+with open('/Digit_Recognizer/train.csv','rU') as csvf:
+    file=csv.reader(csvf)
+    Data=list(file)
+    
+row1=Data[1][1:len(Data[0])]
+row1b=[int(i) for i in row1]
+
+im1=np.reshape(row1b, (28, 28))
+im1=np.matrix(im1)
+resizedim1=ndimage.interpolation.zoom(im1,.8,order=1) #resize to 22x22; less noise with order 1.
+
+fig = plt.figure()
+ax = fig.add_subplot(1,2,1)
+ax.set_aspect('equal')
+plt.imshow(im1, interpolation='nearest', cmap=plt.cm.ocean) #original image
+plt.colorbar()
+ax = fig.add_subplot(1,2,2)
+ax.set_aspect('equal')
+plt.imshow(resizedim1, interpolation='nearest', cmap=plt.cm.ocean) #downsized image
+plt.colorbar()
+plt.show()
+
